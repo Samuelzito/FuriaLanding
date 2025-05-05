@@ -42,3 +42,14 @@ npm install
 
 # Rodar o projeto
 npm run dev
+⚠️ É necessário configurar o arquivo firebase.js com suas credenciais do Firebase.
+
+
+👨‍💻 Desenvolvido por
+Samuel Leite de MOoraes – LinkedIn | GitHub
+
+📬 Contato
+Caso tenha dúvidas ou sugestões, fique à vontade para entrar em contato!
+
+🏁 Licença
+Este projeto é apenas para fins acadêmicos e de demonstração técnica. Todos os direitos da marca FURIA pertencem à organização FURIA Esports.
