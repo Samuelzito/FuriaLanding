@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { auth, db } from '../firebase';
 import { doc, getDoc } from 'firebase/firestore';
-import FuriaLogo from './FuriaLogo';
 
 function Fanhub() {
     const [usuario, setUsuario] = useState(null);
+    const [pontuacao, setPontuacao] = useState(0);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -14,7 +14,9 @@ function Fanhub() {
             const docRef = doc(db, 'usuarios', user.uid);
             getDoc(docRef).then((docSnap) => {
                 if (docSnap.exists()) {
-                    setUsuario(docSnap.data());
+                    const data = docSnap.data();
+                    setUsuario(data);
+                    calcularPontuacao(data);
                 }
             });
         } else {
@@ -22,26 +24,31 @@ function Fanhub() {
         }
     }, [navigate]);
 
+    const calcularPontuacao = (data) => {
+        let pontos = 0;
+        if (data.instagram) pontos += 20;
+        if (data.twitter) pontos += 20;
+        if (data.tiktok) pontos += 20;
+        if (data.twitch) pontos += 20;
+        if (data.youtube) pontos += 20;
+        if (data.idade) pontos += 10;
+        if (data.cpf) pontos += 10;
+        if (data.nome) pontos += 10;
+        setPontuacao(pontos);
+    };
+
     if (!usuario) return null;
 
-    const cadastroIncompleto =
-        !usuario.instagram &&
-        !usuario.twitter &&
-        !usuario.tiktok &&
-        !usuario.twitch &&
-        !usuario.youtube;
-
-    const perfilCompleto = !cadastroIncompleto;
+    const perfilCompleto = pontuacao >= 100;
 
     return (
-        <div className="min-h-screen bg-black text-white px-4 py-10 font-['Saira'] relative">
-            <FuriaLogo />
+        <div className="min-h-screen bg-black text-white px-4 py-10 font-['Saira']">
             <h1 className="text-3xl font-extrabold text-center mb-4">
                 Bem-vindo ao Fanhub da FURIA, {usuario.nome}!
             </h1>
             <p className="text-center text-zinc-400 max-w-2xl mx-auto mb-10">
-                Essa é a sua central de engajamento com a FURIA. Aqui você poderá completar seu perfil, acumular pontos,
-                subir no ranking e ganhar recompensas exclusivas como acesso antecipado a eventos, sorteios e muito mais!
+                Essa é a sua central de engajamento com a FURIA. Complete seu perfil, acumule pontos,
+                suba no ranking e desbloqueie recompensas exclusivas como sorteios, eventos e lançamentos antecipados!
             </p>
 
             <div className="bg-zinc-900 p-6 rounded-xl max-w-md mx-auto mb-6 relative">
@@ -62,25 +69,31 @@ function Fanhub() {
 
             <div className="grid grid-cols-2 gap-4 max-w-md mx-auto mb-6">
                 <div className="bg-zinc-900 p-4 rounded-xl text-center">
-                    ✅ <p className="mt-2 font-bold">Pontuação de Engajamento</p>
+                    ✅
+                    <p className="mt-2 font-bold">
+                        Pontuação: <span className="text-amber-300">{pontuacao} pts</span>
+                    </p>
                 </div>
-                <div
-                    onClick={() => navigate('/fanhub/recompensas')}
-                    className="bg-zinc-900 p-4 rounded-xl text-center cursor-pointer hover:bg-zinc-800 transition"
-                >
+                <div className="bg-zinc-900 p-4 rounded-xl text-center">
                     🎁 <p className="mt-2 font-bold">Recompensas Exclusivas</p>
+                    <button
+                        onClick={() => navigate('/fanhub/recompensas')}
+                        className="mt-2 text-sm bg-amber-400 px-3 py-1 rounded-full text-black font-semibold hover:scale-105 transition"
+                    >
+                        Ver Recompensas
+                    </button>
                 </div>
-                <div
-                    onClick={() => navigate('/fanhub/ranking')}
-                    className="bg-zinc-900 p-4 rounded-xl text-center cursor-pointer hover:bg-zinc-800 transition"
-                >
+                <div className="bg-zinc-900 p-4 rounded-xl text-center">
                     🏆 <p className="mt-2 font-bold">Ranking de Fãs</p>
+                    <button
+                        onClick={() => navigate('/fanhub/ranking')}
+                        className="mt-2 text-sm bg-amber-400 px-3 py-1 rounded-full text-black font-semibold hover:scale-105 transition"
+                    >
+                        Ver Ranking
+                    </button>
                 </div>
-                <div
-                    onClick={() => navigate('/fanhub/upload-documento')}
-                    className="bg-zinc-900 p-4 rounded-xl text-center cursor-pointer hover:bg-zinc-800 transition"
-                >
-                    🧾 <p className="mt-2 font-bold">Verificar Documento</p>
+                <div className="bg-zinc-900 p-4 rounded-xl text-center">
+                    🎮 <p className="mt-2 font-bold">Sorteios & Eventos</p>
                 </div>
             </div>
 

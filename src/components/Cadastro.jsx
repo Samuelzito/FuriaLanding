@@ -12,10 +12,12 @@ function Cadastro() {
     const [idade, setIdade] = useState('');
     const [cpf, setCpf] = useState('');
     const [erro, setErro] = useState('');
+    const [sucesso, setSucesso] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setErro('');
+        setSucesso('');
 
         try {
             const credenciais = await createUserWithEmailAndPassword(auth, email, senha);
@@ -33,7 +35,10 @@ function Cadastro() {
             localStorage.setItem('idade', idade);
             localStorage.setItem('cpf', cpf);
 
-            navigate('/fanhub/completar');
+            setSucesso('🔥 Cadastro realizado com sucesso! Bem-vindo(a) à FURIA!');
+            setTimeout(() => {
+                navigate('/fanhub');
+            }, 3000);
         } catch (err) {
             setErro('Erro ao cadastrar: ' + err.message);
         }
@@ -43,7 +48,16 @@ function Cadastro() {
         <div className="min-h-screen flex items-center justify-center bg-escuro text-white px-4">
             <div className="bg-card p-8 rounded-2xl shadow-md w-full max-w-md">
                 <h1 className="text-3xl font-extrabold mb-6 text-center">Crie sua conta</h1>
-                {erro && <p className="text-red-500 text-center text-sm mb-4">{erro}</p>}
+
+                {erro && (
+                    <p className="text-red-500 text-center text-sm mb-4">{erro}</p>
+                )}
+
+                {sucesso && (
+                    <div className="text-center text-amber-300 font-bold bg-zinc-900 border border-amber-400 rounded-lg p-4 mb-4">
+                        {sucesso}
+                    </div>
+                )}
 
                 <form className="space-y-4" onSubmit={handleSubmit}>
                     <input
