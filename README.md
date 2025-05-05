@@ -2,6 +2,8 @@
 
 Este projeto foi desenvolvido como solução para o **Desafio Know Your Fan** da FURIA Tech. A proposta envolve a criação de uma plataforma interativa que permite aos fãs se conectarem com a organização, acumularem pontos de engajamento e desbloquearem recompensas exclusivas.
 
+https://furia-landing-ten.vercel.app/fanhub/turbinar
+
 ---
 
 ## 🚀 Funcionalidades
